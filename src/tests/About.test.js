@@ -1,3 +1,1 @@
-test('', () => {
-    expect(Xablau).toBeFalsy();
-});
+test('', () => {});
