@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
@@ -41,7 +42,7 @@ describe('Requisito 1', () => {
     expect(pathname).toBe('/about');
   });
 
-  it('Teste se a aplicação é redirecionada p/ página inicial ao clicar em FavPok', () => {
+  test('Teste se a aplic. é redirecionada p/ página inicial ao clicar em FavPok', () => {
     const render = renderWithRouter(<App />);
     const { history } = render;
 
@@ -50,5 +51,20 @@ describe('Requisito 1', () => {
 
     const { pathname } = history.location;
     expect(pathname).toBe('/favorites');
+  });
+
+  test('Teste se página com erro 404 é renderizada se a rota não foi encontrada', () => {
+    const render = renderWithRouter(<App />);
+    const { history } = render;
+
+    act(() => {
+      history.push('/Thiago');
+    });
+
+    const notFoundText = screen.getByRole('heading', { level: 2, name: /not found/i });
+    expect(notFoundText).toBeInTheDocument();
+
+    const notFoundImage = screen.getByRole('img', { name: /pikachu crying/i });
+    expect(notFoundImage).toBeInTheDocument();
   });
 });
